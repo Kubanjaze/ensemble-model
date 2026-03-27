@@ -13,6 +13,22 @@ CLI: `python main.py --input data/compounds.csv --threshold 7.0`
 - Exclude LightGBM (ROC-AUC=0.44 from Phase 38/43 — below random, contaminates)
 - Ensemble = mean(p_rf, p_svm) per compound
 
+## Key Concepts
+- Probability-average ensemble (mean of predict_proba from RF + SVM)
+- LightGBM excluded by design based on Phase 38/43 contamination lesson
+- LOO-CV for unbiased evaluation of ensemble scores
+- Comparison: individual model vs ensemble ROC-AUC, PR-AUC, EF@K
+
+## Verification Checklist
+- [x] Ensemble ROC-AUC = 0.844 (best overall, +0.018 over RF alone)
+- [x] Ensemble PR-AUC = 0.923 (best overall, +0.013 over RF alone)
+- [x] EF@10% = 1.50x for all models (at ceiling due to high hit rate)
+- [x] ensemble output files saved to output/
+
+## Risks
+- Two-model ensemble provides limited diversity; adding more quality models would improve robustness
+- Probability averaging assumes models are equally reliable, which may not hold
+
 ## Actual Results (v1.1)
 
 | Model | ROC-AUC | PR-AUC | EF@10% | EF@20% |
